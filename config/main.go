@@ -17,7 +17,7 @@ var (
 // getNextgenClient configures a client and context using env vars
 // HARNESS_PLATFORM_API_KEY: harness nextgen api key
 // HARNESS_ACCOUNT_ID: harness account id
-func getNextgenClient() (client *nextgen.APIClient, ctx context.Context) {
+func GetNextgenClient() (client *nextgen.APIClient, ctx context.Context) {
 	configureClient.Do(func() {
 		cfg := nextgen.NewConfiguration()
 		client = nextgen.NewAPIClient(cfg)
@@ -28,10 +28,10 @@ func getNextgenClient() (client *nextgen.APIClient, ctx context.Context) {
 	return
 }
 
-// getOrgProj pulls org and project information using env vars
+// getOrgProj pulls org and project information using env vars, specifying neither results in account level scoping
 // HARNESS_PLATFORM_ORGANIZATION: organization id
 // HARNESS_PLATFORM_PROJECT: project id
-func getOrgProj() (organization, project optional.String) {
+func GetScope() (organization, project optional.String) {
 	if value, ok := os.LookupEnv("HARNESS_PLATFORM_ORGANIZATION"); ok {
 		organization = optional.NewString(value)
 	} else {
