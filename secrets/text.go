@@ -2,7 +2,6 @@ package secrets
 
 import (
 	"context"
-	"log"
 
 	"github.com/antihax/optional"
 	"github.com/harness/harness-go-sdk/harness/nextgen"
@@ -11,7 +10,7 @@ import (
 )
 
 // SetSecretText creates/updates a text secret
-func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, name, content, secretManager string) bool {
+func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, name, content, secretManager string) (err error) {
 	if secretManager == "" {
 		secretManager = "harnessSecretManager"
 	}
@@ -40,30 +39,21 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 		OrgIdentifier:     organization,
 		ProjectIdentifier: project,
 	})
+	if err != nil {
+		return
+	}
 	if resp.Data == nil {
-		resp, _, err = client.SecretsApi.PostSecret(ctx, nextgen.SecretRequestWrapper{Secret: secret}, client.AccountId, &nextgen.SecretsApiPostSecretOpts{
+		_, _, err = client.SecretsApi.PostSecret(ctx, nextgen.SecretRequestWrapper{Secret: secret}, client.AccountId, &nextgen.SecretsApiPostSecretOpts{
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		if err != nil {
-			log.Printf("unable to create secret %s: %s\n", identifier, err)
-			return false
-		} else {
-			log.Printf("secret created, correlation id: %s\n", resp.CorrelationId)
-			return true
-		}
+		return
 	} else {
-		resp, _, err = client.SecretsApi.PutSecret(ctx, client.AccountId, identifier, &nextgen.SecretsApiPutSecretOpts{
+		_, _, err = client.SecretsApi.PutSecret(ctx, client.AccountId, identifier, &nextgen.SecretsApiPutSecretOpts{
 			Body:              optional.NewInterface(nextgen.SecretRequestWrapper{Secret: secret}),
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		if err != nil {
-			log.Printf("unable to update secret %s: %s\n", identifier, err)
-			return false
-		} else {
-			log.Printf("secret updated, correlation id: %s\n", resp.CorrelationId)
-			return true
-		}
+		return
 	}
 }
