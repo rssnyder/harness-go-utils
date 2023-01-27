@@ -1,6 +1,7 @@
 package secrets
 
 import (
+	"context"
 	"log"
 
 	"github.com/antihax/optional"
@@ -10,14 +11,12 @@ import (
 )
 
 // SetSecretText creates/updates a text secret
-func SetSecretText(identifier, name, content, secretManager string) bool {
+func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, name, content, secretManager string) bool {
 	if secretManager == "" {
 		secretManager = "harnessSecretManager"
 	}
 
 	organization, project := config.GetScope()
-
-	client, ctx := config.GetNextgenClient()
 
 	secret := &nextgen.Secret{
 		Type_:      nextgen.SecretTypes.SecretText,
