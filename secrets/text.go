@@ -40,20 +40,20 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 		ProjectIdentifier: project,
 	})
 	if err != nil {
-		return
+		return err
 	}
 	if resp.Data == nil {
 		_, _, err = client.SecretsApi.PostSecret(ctx, nextgen.SecretRequestWrapper{Secret: secret}, client.AccountId, &nextgen.SecretsApiPostSecretOpts{
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		return
+		return err
 	} else {
 		_, _, err = client.SecretsApi.PutSecret(ctx, client.AccountId, identifier, &nextgen.SecretsApiPutSecretOpts{
 			Body:              optional.NewInterface(nextgen.SecretRequestWrapper{Secret: secret}),
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		return
+		return err
 	}
 }
