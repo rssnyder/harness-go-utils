@@ -2,6 +2,7 @@ package secrets
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/antihax/optional"
 	"github.com/harness/harness-go-sdk/harness/nextgen"
@@ -40,6 +41,7 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 		ProjectIdentifier: project,
 	})
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	if resp.Data == nil {
@@ -47,6 +49,7 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
+		fmt.Println(err)
 		return err
 	} else {
 		_, _, err = client.SecretsApi.PutSecret(ctx, client.AccountId, identifier, &nextgen.SecretsApiPutSecretOpts{
@@ -54,6 +57,7 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
+		fmt.Println(err)
 		return err
 	}
 }
