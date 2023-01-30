@@ -2,7 +2,6 @@ package secrets
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/antihax/optional"
 	"github.com/harness/harness-go-sdk/harness/nextgen"
@@ -41,23 +40,20 @@ func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, n
 		ProjectIdentifier: project,
 	})
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return
 	}
 	if resp.Data == nil {
 		_, _, err = client.SecretsApi.PostSecret(ctx, nextgen.SecretRequestWrapper{Secret: secret}, client.AccountId, &nextgen.SecretsApiPostSecretOpts{
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		fmt.Println(err)
-		return err
+		return
 	} else {
 		_, _, err = client.SecretsApi.PutSecret(ctx, client.AccountId, identifier, &nextgen.SecretsApiPutSecretOpts{
 			Body:              optional.NewInterface(nextgen.SecretRequestWrapper{Secret: secret}),
 			OrgIdentifier:     organization,
 			ProjectIdentifier: project,
 		})
-		fmt.Println(err)
-		return err
+		return
 	}
 }
