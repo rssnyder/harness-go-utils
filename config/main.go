@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/antihax/optional"
@@ -15,7 +16,7 @@ var (
 )
 
 // getNextgenClient configures a client and context using env vars
-// HARNESS_PLATFORM_API_KEY: harness nextgen api key
+// HARNESS_API_KEY: harness nextgen api key
 // HARNESS_ACCOUNT_ID: harness account id
 func GetNextgenClient() (client *nextgen.APIClient, ctx context.Context) {
 	configureClient.Do(func() {
@@ -45,4 +46,9 @@ func GetScope() (organization, project optional.String) {
 	}
 
 	return
+}
+
+// NameToIdentifier formats names into harness ids
+func NameToIdentifier(name string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(name, " ", "_"), "-", ""))
 }
