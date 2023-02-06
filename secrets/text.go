@@ -10,10 +10,12 @@ import (
 )
 
 // SetSecretText creates/updates a text secret
-func SetSecretText(ctx context.Context, client *nextgen.APIClient, identifier, name, content, secretManager string) (err error) {
+func SetSecretText(ctx context.Context, client *nextgen.APIClient, name, content, secretManager string) (err error) {
 	if secretManager == "" {
 		secretManager = "harnessSecretManager"
 	}
+
+	identifier := config.NameToIdentifier(name)
 
 	organization, project := config.GetScope()
 

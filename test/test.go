@@ -9,11 +9,11 @@ import (
 
 func main() {
 	c, ctx := config.GetNextgenClient()
-	err := secrets.SetSecretText(ctx, c, "cli", "cli", "cli", "")
+	err := secrets.SetSecretText(ctx, c, "cli", "cli", "")
 	if err != nil {
 		fmt.Println(err)
 	}
-	err = secrets.SetSecretText(ctx, c, "cli0", "cli", "cli", "")
+	err = secrets.SetSecretText(ctx, c, "cli0", "cli", "")
 	if err != nil {
 		fmt.Println(err)
 	}
